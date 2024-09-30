@@ -1,0 +1,1 @@
+function generateStar(starType, size) {}

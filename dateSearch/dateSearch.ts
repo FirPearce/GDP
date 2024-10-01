@@ -31,13 +31,9 @@ function dayName(day) {
 }
 
 function convertDay(weekDay, day) {
-  console.log(weekDay, day);
-  if (weekDay === 4) {
-    return { newDay: day + 3, newWeekDay: 0 };
-  } else if (weekDay === 5) {
-    return { newDay: day + 2, newWeekDay: 0 };
-  } else if (weekDay === 6) {
-    return { newDay: day + 1, newWeekDay: 0 };
+  const monday = 0;
+  if ([4, 5, 6].includes(weekDay)) {
+    return { newDay: day + (7 - weekDay), newWeekDay: monday };
   }
   return { newDay: day, newWeekDay: weekDay };
 }

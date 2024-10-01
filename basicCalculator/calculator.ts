@@ -1,36 +1,38 @@
 class Calculator {
-  _result: number;
+  protected _value: number;
 
-  constructor(result: number) {
-    this._result = result;
+  constructor(value: number) {
+    this._value = value;
   }
 
   add(num: number): void {
-    this._result += num;
+    this._value += num;
   }
 
   substract(num: number): void {
-    this._result -= num;
+    this._value -= num;
   }
 
   multiply(num: number): void {
-    this._result *= num;
+    this._value *= num;
   }
 
   divided(num: number): void {
-    this._result /= num;
+    this._value /= num;
   }
 
-  get value() {
-    return this._result;
+  get result() {
+    return this._value;
   }
 }
 
-const result = new Calculator(4);
+class ScientificCalculator extends Calculator {}
 
-result.add(5);
-result.substract(1);
-result.multiply(6);
-result.divided(4);
+const calculator = new Calculator(4);
 
-console.log(result.value);
+calculator.add(5);
+calculator.substract(1);
+calculator.multiply(6);
+calculator.divided(4);
+
+console.log(calculator.result);

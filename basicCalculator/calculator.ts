@@ -27,7 +27,7 @@ class Calculator {
 }
 
 class ScientificCalculator extends Calculator {
-  readonly _phi = 3.14;
+  static readonly phi: number = 3.14;
 
   squared(): number {
     const luasPersegi = this._value ** 2;
@@ -41,18 +41,14 @@ class ScientificCalculator extends Calculator {
 
   // luas lingkaran
   circleArea(): number {
-    const luasLingkaran = this._phi * this._value ** 2;
+    const luasLingkaran = ScientificCalculator.phi * this._value ** 2;
     return luasLingkaran;
   }
 
   // keliling lingkaran
   circleRound(): number {
-    const kelilingLingkaran = 2 * this._phi * this._value;
+    const kelilingLingkaran = 2 * ScientificCalculator.phi * this._value;
     return kelilingLingkaran;
-  }
-
-  phi(): number {
-    return this._phi;
   }
 }
 
@@ -77,4 +73,4 @@ console.log(scientificCal.squared());
 console.log(scientificCal.cubed());
 console.log(scientificCal.circleArea());
 console.log(scientificCal.circleRound());
-console.log(scientificCal.phi());
+console.log(ScientificCalculator.phi);

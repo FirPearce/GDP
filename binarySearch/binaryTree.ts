@@ -1,28 +1,32 @@
-function binarySearch(listNum: number[], num: number) {
-  // sorting list number
-  listNum = listNum.sort((a, b) => a - b);
-  let result = [];
-  let nilaiAwal = 0;
-  let nilaiAkhir = listNum.length - 1;
-  while (nilaiAwal <= nilaiAkhir) {
-    // cari nilai tengah
-    let mid = Math.floor((nilaiAwal + nilaiAkhir) / 2);
-
-    if (listNum[mid] == num) {
-      result.push(listNum[mid]);
-      break;
-    }
-    result.push(listNum[mid]);
-    // kalau
-    if (listNum[mid] > num) {
-      nilaiAkhir = mid - 1;
-    } else {
-      nilaiAwal = mid + 1;
-    }
-  }
-  return result;
+interface IParam {
+  listNum: number[];
+  target: number;
 }
 
-const list = [7, 3, 10, 1, 6, 14, 4, 7, 13];
+function binarySearch({ listNum, target }: IParam): number {
+  let left = 0;
+  let right = listNum.length - 1;
 
-console.log(binarySearch(list, 14));
+  while (left <= right) {
+    let mid = Math.floor((left + right) / 2);
+    let midVal = listNum[mid];
+
+    if (midVal == target) {
+      return mid;
+    }
+
+    if (midVal > target) {
+      right = mid - 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+
+  return -1;
+}
+
+let list = [7, 3, 10, 1, 6, 14, 4, 7, 13];
+list = list.sort((a, b) => a - b);
+
+console.log(list);
+console.log(binarySearch({ listNum: list, target: 6 }));

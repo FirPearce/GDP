@@ -18,6 +18,19 @@ function binarySearch(_a) {
     return -1;
 }
 var list = [7, 3, 10, 1, 6, 14, 4, 7, 13];
-list = list.sort(function (a, b) { return a - b; });
+// list = list.sort((a, b) => a - b);
+function sortingList(numList) {
+    for (var i = 0; i < numList.length; i++) {
+        for (var j = 0; j < numList.length - 1 - i; j++) {
+            if (numList[j] > numList[j + 1]) {
+                var t = numList[j + 1];
+                numList[j + 1] = numList[j];
+                numList[j] = t;
+            }
+        }
+    }
+    return numList;
+}
+sortingList(list);
 console.log(list);
 console.log(binarySearch({ listNum: list, target: 6 }));

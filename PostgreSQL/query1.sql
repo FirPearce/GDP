@@ -254,5 +254,88 @@ insert into biblio_item (id, biblio_id, inventory_code, barcode, collection_type
 (gen_random_uuid(),(select id from biblio where title='biblio_16'), '1016', '1000016', (select id from collection_type where name='collection_type_16'), (select id from rack where name='rack_16'), 10000, 'IDR', 'REPAIR'),
 (gen_random_uuid(),(select id from biblio where title='biblio_17'), '1017', '1000017', (select id from collection_type where name='collection_type_17'), (select id from rack where name='rack_17'), 80000, 'IDR', 'REPAIR'),
 (gen_random_uuid(),(select id from biblio where title='biblio_18'), '1018', '1000018', (select id from collection_type where name='collection_type_18'), (select id from rack where name='rack_18'), 30000, 'IDR', 'REPAIR'),
-(gen_random_uuid(),(select id from biblio where title='biblio_19'), '1019', '1000019', (select id from collection_type where name='collection_type_19'), (select id from rack where name='rack_19'), 80000, 'IDR', 'REPAIR'),
-(gen_random_uuid(),(select id from biblio where title='biblio_20'), '1020', '1000020', (select id from collection_type where name='collection_type_20'), (select id from rack where name='rack_20'), 70000, 'IDR', 'REPAIR');
+(gen_random_uuid(),(select id from biblio where title='biblio_19'), '1019', '1000019', (select id from collection_type where name='collection_type_19'), (select id from rack where name='rack_19'), 80000, 'IDR'),
+(gen_random_uuid(),(select id from biblio where title='biblio_20'), '1020', '1000020', (select id from collection_type where name='collection_type_20'), (select id from rack where name='rack_20'), 70000, 'IDR');
+
+-- Response 1
+select "biblio_item".id as "id item", "biblio".title,"biblio".isbn, "rack".name as "rack name", "biblio_item".barcode,"biblio_item".inventory_code, "topic".topic_code as "topic name", "publisher".name as "publisher name", "place".name as "place name", "user".name as "author name"
+from "biblio_item"
+left join "biblio" on "biblio_item".biblio_id = "biblio".id
+left join "rack" on "biblio_item".rack_id = "rack".id
+left join "topic" on "biblio".topic_id = "topic".id
+left join "publisher" on "biblio".publisher_id = "publisher".id
+left join "place" on "biblio".publish_place_id = "place".id
+inner join "biblio_authors" on "biblio".id = "biblio_authors".biblio_id
+inner join "user" on "biblio_authors".user_id = "user".id;
+
+-- Response 2 
+Select title , isbn, count(id) total_item 
+from biblio 
+group by "biblio".id;
+
+-- Response 2  total item = biblio_item id
+Select title , isbn, count("biblio_item".id) total_item 
+from biblio
+inner join "biblio_item" on "biblio".id = "biblio_item".biblio_id 
+group by "biblio".id;
+
+-- Response 2.1
+Select "biblio".title , isbn, count("biblio_item".id) total_item 
+from biblio 
+inner join "biblio_item" on "biblio".id = "biblio_item".biblio_id 
+where "biblio_item".status is null
+group by "biblio".id;
+
+-- Response 3
+select 
+"biblio".id as "id biblio",
+"biblio".title,
+"biblio".isbn, 
+"rack".name as "rack name",
+string_agg(DISTINCT "biblio_item".barcode, ', ') as barcode,
+string_agg(DISTINCT "biblio_item".inventory_code,', ') as "inventory code",
+"topic".topic_code as "topic name",
+"publisher".name as "publisher name",
+"place".name as "place name",
+string_agg(distinct "user".name, ', ') as "author name"
+from "biblio"
+left join "biblio_item" on "biblio_item".biblio_id = "biblio".id
+left join "rack" on "biblio_item".rack_id = "rack".id
+left join "topic" on "biblio".topic_id = "topic".id
+left join "publisher" on "biblio".publisher_id = "publisher".id
+left join "place" on "biblio".publish_place_id = "place".id
+inner join "biblio_authors" on "biblio".id = "biblio_authors".biblio_id
+inner join "user" on "biblio_authors".user_id = "user".id
+group by "biblio".id,
+"rack".name,
+"topic".topic_code,
+"publisher"."name",
+"place"."name"
+
+-- Response 3.1
+select 
+"biblio".id as "id biblio",
+"biblio".title,
+"biblio".isbn, 
+"rack".name as "rack name",
+string_agg(DISTINCT "biblio_item".barcode, ', ') as barcode,
+string_agg(DISTINCT "biblio_item".inventory_code,', ') as "inventory code",
+"topic".topic_code as "topic name",
+"publisher".name as "publisher name",
+"place".name as "place name",
+string_agg(distinct "user".name, ', ') as "author name"
+from "biblio"
+left join "biblio_item" on "biblio_item".biblio_id = "biblio".id
+left join "rack" on "biblio_item".rack_id = "rack".id
+left join "topic" on "biblio".topic_id = "topic".id
+left join "publisher" on "biblio".publisher_id = "publisher".id
+left join "place" on "biblio".publish_place_id = "place".id
+inner join "biblio_authors" on "biblio".id = "biblio_authors".biblio_id
+inner join "user" on "biblio_authors".user_id = "user".id
+where "biblio_item".status is null --perbedaan dari yg response 3 
+group by "biblio".id, 
+"rack".name,
+"topic".topic_code,
+"publisher"."name",
+"place"."name"
+

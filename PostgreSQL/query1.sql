@@ -258,9 +258,18 @@ insert into biblio_item (id, biblio_id, inventory_code, barcode, collection_type
 (gen_random_uuid(),(select id from biblio where title='biblio_20'), '1020', '1000020', (select id from collection_type where name='collection_type_20'), (select id from rack where name='rack_20'), 70000, 'IDR');
 
 -- Response 1
-select "biblio_item".id as "id item", "biblio".title,"biblio".isbn, "rack".name as "rack name", "biblio_item".barcode,"biblio_item".inventory_code, "topic".topic_code as "topic name", "publisher".name as "publisher name", "place".name as "place name", "user".name as "author name"
+select 
+"biblio_item".id as "id item", 
+"biblio".title,"biblio".isbn, 
+"rack".name as "rack name", 
+"biblio_item".barcode,
+"biblio_item".inventory_code, 
+"topic".topic_code as "topic name", 
+"publisher".name as "publisher name", 
+"place".name as "place name", 
+"user".name as "author name"
 from "biblio_item"
-left join "biblio" on "biblio_item".biblio_id = "biblio".id
+inner join "biblio" on "biblio_item".biblio_id = "biblio".id
 left join "rack" on "biblio_item".rack_id = "rack".id
 left join "topic" on "biblio".topic_id = "topic".id
 left join "publisher" on "biblio".publisher_id = "publisher".id
@@ -338,4 +347,13 @@ group by "biblio".id,
 "topic".topic_code,
 "publisher"."name",
 "place"."name"
+
+-- Perbedaan left, right, inner join
+select 
+"biblio".title,
+u.id,
+u."name"
+from biblio
+inner join biblio_authors ba on "biblio".id =  ba.biblio_id 
+left join "user" u on ba.user_id = u.id
 
